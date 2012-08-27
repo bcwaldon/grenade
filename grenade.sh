@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o xtrace
 
 # ``grenade.sh`` is an OpenStack upgrade test harness to exercise the
 # upgrade process from Essex to Folsom.  It uses DevStack to perform
@@ -6,63 +7,38 @@
 
 # Grenade assumes it is running on the system that will be hosting the upgrade processes
 
+ESSEX_DEST=/opt/stack.essex
+ESSEX_DEVSTACK_REPO=http://github.com/openstack-dev/devstack.git
+ESSEX_DEVSTACK_BRANCH=stable/essex
 
-# Keep track of the devstack directory
+FOLSOM_DEST=/opt/stack.folsom
+FOLSOM_DEVSTACK_REPO=$ESSEX_DEVSTACK_REPO
+FOLSOM_DEVSTACK_BRANCH=master
+
+
+# Keep track of the grenade directory
 GRENADE_DIR=$(cd $(dirname "$0") && pwd)
 
 # Import common functions
 source $GRENADE_DIR/functions
 
-# Determine what system we are running on.  This provides ``os_VENDOR``,
-# ``os_RELEASE``, ``os_UPDATE``, ``os_PACKAGE``, ``os_CODENAME``
-# and ``DISTRO``
-GetDistro
-
-# Source params
-source $GRENADE_DIR/grenaderc
-
-# For debugging
-set -o xtrace
-
 
 # System Preparation
 # ==================
 
-# perform cleanup to ensure a clean starting environment
-mkdir -p $START_DIR
+mkdir -p $ESSEX_DEST
+git_clone $ESSEX_DEVSTACK_REPO $ESSEX_DEST $ESSEX_DEVSTACK_BRANCH
 
-# check out devstack
-git_clone $DEVSTACK_START_REPO $DEVSTACK_START_DIR $DEVSTACK_START_BRANCH
+mkdir -p $FOLSOM_DEST
+git_clone $FOLSOM_DEVSTACK_REPO $FOLSOM_DEST $FOLSOM_DEVSTACK_BRANCH
 
 # Set up localrc
-cp -p $GRENADE_DIR/devstack.start.localrc $DEVSTACK_START_DIR/localrc
+#cp -p $GRENADE_DIR/devstack.start.localrc $DEVSTACK_START_DIR/localrc
 
 # clean up apache config
 # essex devstack uses 000-default
 # folsom devstack uses horizon -> ../sites-available/horizon
-if [[ -e /etc/apache2/sites-enabled/horizon ]]; then
+#if [[ -e /etc/apache2/sites-enabled/horizon ]]; then
     # Clean up folsom-style
-    sudo "a2dissite horizon; service apache2 reload"
-fi
-
-# TODO(dtroyer): Needs to get rid of modern glance command too
-#                all command-line libs?  how do we want to handle them?
-
-
-# Essex Install
-# =============
-
-cd $DEVSTACK_START_DIR
-
-# TODO(dtroyer): the django admin account bug seems to be present, work
-#                around it or fix it.  why haven't we heard from others
-#                about this in stable/essex?
-
-echo ./stack.sh
-
-
-# Exercises
-# =========
-
-echo ./exercise.sh
-
+#    sudo "a2dissite horizon; service apache2 reload"
+#fi

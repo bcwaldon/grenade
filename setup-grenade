@@ -1,33 +1,12 @@
 #!/usr/bin/env bash
-# setup-grenade hostname [username]
+set -o xtrace
+
+# setup-grenade <[user@]hostname>
 #
 # Assumes ssh keys set up to an account with root privs
 
 
-# Keep track of the devstack directory
-GRENADE_DIR=$(cd $(dirname "$0") && pwd)
-
-# Source params
-source $GRENADE_DIR/grenaderc
-
-GRENADE_REPO=git@github.com:dtroyer/grenade.git
-GRENADE_DIR=$DEST/grenade
-
+GRENADE_DIR=/opt/stack/grenade
 HOST=${1:-localhost}
 
-DEST_USER=${USER:-${LOGNAME:-fred}}
 
-set -o xtrace
-
-ssh -t $DEST_USER@$HOST " \
-    sudo mkdir -p $DEST; \
-    [[ -w $DEST ]] || sudo chown `whoami` $DEST; \
-    [[ -d $GRENADE_DIR ]] && rm -rf $GRENADE_DIR; \
-    git clone $GRENADE_REPO $GRENADE_DIR; \
-    IP=\$(ip addr show dev eth0 | awk '/inet / { split(\$2,a,\"/\"); print a[1] }'); \
-    echo "IP: \$IP"; \
-    sed -i \"
-        /^DEST=/s|^DEST=.*$|DEST=$DEST|;
-        /^HOST_IP=/s|^HOST_IP=.*$|HOST_IP=\$IP|;
-    \" $GRENADE_DIR/devstack.start.localrc; \
-"
