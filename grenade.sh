@@ -27,10 +27,14 @@ source $GRENADE_DIR/functions
 # ==================
 
 mkdir -p $ESSEX_DEST
-git_clone $ESSEX_DEVSTACK_REPO $ESSEX_DEST $ESSEX_DEVSTACK_BRANCH
+git clone $ESSEX_DEVSTACK_REPO $ESSEX_DEST/devstack
+cd $ESSEX_DEST/devstack
+git fetch $ESSEX_DEVSTACK_REPO $ESSEX_DEVSTACK_BRANCH && git checkout FETCH_HEAD
 
 mkdir -p $FOLSOM_DEST
-git_clone $FOLSOM_DEVSTACK_REPO $FOLSOM_DEST $FOLSOM_DEVSTACK_BRANCH
+git clone $FOLSOM_DEVSTACK_REPO $FOLSOM_DEST/devstack
+cd $FOLSOM_DEST/devstack
+git fetch $FOLSOM_DEVSTACK_REPO $FOLSOM_DEVSTACK_BRANCH && git checkout FETCH_HEAD
 
 # Set up localrc
 #cp -p $GRENADE_DIR/devstack.start.localrc $DEVSTACK_START_DIR/localrc
