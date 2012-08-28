@@ -38,12 +38,11 @@ git fetch $FOLSOM_DEVSTACK_REPO $FOLSOM_DEVSTACK_BRANCH && git checkout FETCH_HE
 
 # Set up localrc
 cp -p $GRENADE_DIR/localrc.essex $ESSEX_DEST/devstack/localrc
-cp -p $GRENADE_DIR/localrc.folsom $FOLSOM_DEST/devstack/localrc
+cd $ESSEX_DEST/devstack
+./stack.sh
 
-# clean up apache config
-# essex devstack uses 000-default
-# folsom devstack uses horizon -> ../sites-available/horizon
-#if [[ -e /etc/apache2/sites-enabled/horizon ]]; then
-    # Clean up folsom-style
-#    sudo "a2dissite horizon; service apache2 reload"
-#fi
+screen -X quit
+
+cp -p $GRENADE_DIR/localrc.folsom $FOLSOM_DEST/devstack/localrc
+cd $FOLSOM_DEST/devstack
+./stack.sh
