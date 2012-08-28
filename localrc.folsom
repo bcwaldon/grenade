@@ -4,3 +4,7 @@ MYSQL_PASSWORD=secrete
 RABBIT_PASSWORD=secrete
 SERVICE_PASSWORD=secrete
 SERVICE_TOKEN=cd0d1a03-b701-4fcb-801a-8b4d0bc3d06e
+GLANCE_IMAGE_DIR=/opt/glance
+RESET_GLANCE=no
+
+ENABLED_SERVICES=g-api,g-reg,key,mysql,rabbit

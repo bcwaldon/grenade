@@ -1,4 +1,5 @@
 DEST=/opt/stack.essex
+GLANCE_IMAGE_DIR=/opt/glance
 ADMIN_PASSWORD=secrete
 MYSQL_PASSWORD=secrete
 RABBIT_PASSWORD=secrete
