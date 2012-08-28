@@ -37,7 +37,8 @@ cd $FOLSOM_DEST/devstack
 git fetch $FOLSOM_DEVSTACK_REPO $FOLSOM_DEVSTACK_BRANCH && git checkout FETCH_HEAD
 
 # Set up localrc
-#cp -p $GRENADE_DIR/devstack.start.localrc $DEVSTACK_START_DIR/localrc
+cp -p $GRENADE_DIR/localrc.essex $ESSEX_DEST/devstack/localrc
+cp -p $GRENADE_DIR/localrc.folsom $FOLSOM_DEST/devstack/localrc
 
 # clean up apache config
 # essex devstack uses 000-default
